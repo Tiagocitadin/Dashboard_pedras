@@ -1,0 +1,149 @@
+/* Layout Centralizado da Tela de Cadastro */
+.register-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Card Principal */
+.register-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.03);
+}
+
+/* Cabeçalho do Card */
+.register-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.register-logo {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.register-header h2 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.register-header p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Formulário de Input */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Botão de Submissão */
+.btn-register {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  margin-top: 8px;
+}
+
+.btn-register:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-register:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Alertas de Feedback */
+.register-alert {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  animation: shake 0.2s ease-in-out;
+}
+
+.register-alert.error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.register-alert.success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+/* Rodapé do Card */
+.register-footer {
+  margin-top: 28px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.register-footer p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.btn-back-login {
+  background: none;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-back-login:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}

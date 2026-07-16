@@ -1,0 +1,347 @@
+/* Layout Geral da Home - Fundo limpo e corporativo */
+.home-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+  background-color: #f8fafc; /* Troca o preto por um cinza claro de alta tecnologia */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Garante que o container externo do app também herde o fundo claro caso necessário */
+body, #root, .main-content {
+  background-color: #f8fafc !important;
+}
+
+/* Banner de Boas-Vindas - Gradiente moderno e bordas suavizadas */
+.welcome-banner {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: #ffffff;
+  padding: 32px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+  margin-bottom: 8px;
+}
+
+.welcome-banner h1 {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.welcome-banner p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.85;
+  max-width: 750px;
+  line-height: 1.5;
+}
+
+/* Grid Principal de Conteúdo */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Seletor caso precise reordenar ou ajustar displays móveis */
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards Base - Clean Design com Sombras de Elevação Leves */
+.info-card, .auth-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.2s ease;
+}
+
+.info-card:hover, .auth-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.info-card h3, .auth-card h3 {
+  margin: 0 0 20px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+/* Lista de Atalhos (Guia de Ação) */
+.action-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.guide-item:hover {
+  transform: translateY(-1px);
+  border-color: #3b82f6;
+  background-color: #f0fdf4; /* sutil destaque ativo */
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.05);
+}
+
+.guide-icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #eff6ff;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.guide-item h4 {
+  margin: 0 0 2px 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.guide-item p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Formulário de Login de Admin */
+.login-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: -16px 0 20px 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-group input {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13.5px;
+  background-color: #fff;
+  color: #1e293b;
+  transition: all 0.15s ease-in-out;
+}
+
+.form-group input::placeholder {
+  color: #94a3b8;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Botões Modernos */
+.btn-submit {
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 11px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  margin-top: 6px;
+}
+
+.btn-submit:hover {
+  background-color: #1e293b;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Área Logada e Botões de Ação */
+.profile-logged-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profile-logged-card .avatar {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  background-color: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.profile-logged-card .email-text {
+  font-size: 14px;
+  color: #475569;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+.role-box {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #334155;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.btn-action-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.15s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.btn-action-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-logout-secundario {
+  background: none;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-logout-secundario:hover {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+/* Mensagens de Erro */
+.login-error-alert {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+
+/* =========================================
+   AÇÕES DO RODAPÉ DE LOGIN (CRIAR CONTA)
+   ========================================= */
+
+.login-footer-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+  gap: 12px;
+}
+
+/* Divisor sutil "ou" com linhas laterais */
+.separator-text {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.separator-text::before,
+.separator-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background-color: #e2e8f0;
+}
+
+.separator-text::before { left: 0; }
+.separator-text::after { right: 0; }
+
+/* Botão de redirecionamento limpo */
+.btn-link-cadastro {
+  background: none;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s ease-in-out;
+  text-align: center;
+}
+
+.btn-link-cadastro:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
