@@ -1,86 +1,38 @@
-.header-actions-container {
-  display: flex;
-  align-items: center;
-}
-
-/* Área do Usuário Logado */
-.user-logged-badge {
+/* Container que força o empurramento para a direita */
+.user-logged-info-right {
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: #f1f5f9;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid #e2e8f0;
+  margin-left: auto; /* ESTA LINHA É A CHAVE: ela empurra o elemento para o canto direito */
+  margin-right: 20px; /* Espaço para não encostar na borda da tela */
 }
 
-.user-info-text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.user-icon {
+/* Ajustes para o nome e elementos internos */
+.user-name {
   font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.user-email-header {
-  font-size: 12px;
   font-weight: 600;
   color: #1e293b;
-  max-width: 140px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.user-role-header {
-  font-size: 9px;
+.admin-badge {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 10px;
   font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #fde68a;
   text-transform: uppercase;
-  color: #2563eb;
-  letter-spacing: 0.04em;
 }
 
-/* Botão Sair */
-.btn-header-logout {
-  background-color: #ef4444;
-  color: #ffffff;
-  border: none;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
+.btn-logout {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
 }
 
-.btn-header-logout:hover {
-  background-color: #dc2626;
-}
-
-/* Botão Acesso Consulta (Deslogado) */
-.btn-header-login {
-  background-color: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  color: #475569;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.btn-header-login:hover {
-  background-color: #e2e8f0;
-  color: #0f172a;
-}

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { supabase } from '../servicos/clienteSupabase'; // Ajuste o caminho do seu cliente Supabase
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../servicos/clienteSupabase'; 
 import './Cadastro.css';
 
-function Cadastro({ onNavigate }) {
+function Cadastro() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,7 +32,7 @@ function Cadastro({ onNavigate }) {
     }
 
     // Registro no Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -99,7 +101,8 @@ function Cadastro({ onNavigate }) {
 
         <div className="register-footer">
           <p>Já possui uma conta?</p>
-          <button className="btn-back-login" onClick={() => onNavigate('home')}>
+          {/* Navegação via router-dom */}
+          <button className="btn-back-login" onClick={() => navigate('/')}>
             Voltar para o Login
           </button>
         </div>

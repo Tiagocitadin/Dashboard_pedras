@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase';
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 import './Dashboard.css';
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const [rawDados, setRawDados] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [filtros, setFiltros] = useState({
         injetora: 'Todos',
         cod_prod: 'Todos',
-        tipo: [], // Alterado para array para multiseleção
+        tipo: [],
         dataInicio: '',
         dataFim: ''
     });
@@ -20,7 +22,7 @@ export default function Dashboard() {
             setLoading(true);
             const { data, error } = await supabase.from('carga_maquina').select('*');
             if (error) {
-                console.error(error);
+                console.error("Erro ao carregar dados:", error);
             } else {
                 setRawDados(data || []);
             }
@@ -29,7 +31,6 @@ export default function Dashboard() {
         fetchDados();
     }, []);
 
-    // Lista única de tipos, removendo nulos ou vazios
     const tiposDisponiveis = useMemo(() => {
         const tipos = [...new Set(rawDados.map(d => d.tipo))];
         return tipos.filter(t => t && t.toString().trim() !== '');
@@ -46,8 +47,6 @@ export default function Dashboard() {
         return rawDados.filter(item => {
             const matchInjetora = filtros.injetora === 'Todos' || item.injetora === filtros.injetora;
             const matchCodProd = filtros.cod_prod === 'Todos' || item.cod_prod === filtros.cod_prod;
-            
-            // Multiseleção: se nenhum tipo estiver selecionado, exibe tudo
             const matchTipo = filtros.tipo.length === 0 || filtros.tipo.includes(item.tipo);
 
             let matchData = true;
@@ -70,10 +69,6 @@ export default function Dashboard() {
 
     const metrics = useDashboardMetrics(dadosFiltrados);
 
-    if (loading) {
-        return <div className="loading-spinner">Processando dados de produção...</div>;
-    }
-
     const toggleTipo = (tipo) => {
         setFiltros(prev => {
             const novosTipos = prev.tipo.includes(tipo)
@@ -83,26 +78,39 @@ export default function Dashboard() {
         });
     };
 
+    if (loading) {
+        return <div className="loading-spinner">Processando dados de produção...</div>;
+    }
+
     return (
         <div className="dashboard-container">
             <aside className="sidebar">
+                {/* Botão Voltar */}
+                <button className="back-home-btn" onClick={() => navigate('/')}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    <span>Voltar ao Início</span>
+                </button>
+
                 <h2 className="brand-title">Pedrasplast</h2>
+
                 <div className="filter-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <label>PERÍODO</label>
-                        <button type="button" className="clear-date-btn" onClick={() => setFiltros({...filtros, dataInicio: '', dataFim: ''})}>✕ LIMPAR</button>
+                        <button type="button" className="clear-date-btn" onClick={() => setFiltros({ ...filtros, dataInicio: '', dataFim: '' })}>✕ LIMPAR</button>
                     </div>
-                    <input type="date" value={filtros.dataInicio} onChange={(e) => setFiltros({...filtros, dataInicio: e.target.value})} />
-                    <input type="date" value={filtros.dataFim} onChange={(e) => setFiltros({...filtros, dataFim: e.target.value})} />
+                    <input type="date" value={filtros.dataInicio} onChange={(e) => setFiltros({ ...filtros, dataInicio: e.target.value })} />
+                    <input type="date" value={filtros.dataFim} onChange={(e) => setFiltros({ ...filtros, dataFim: e.target.value })} />
 
                     <label>INJETORA</label>
-                    <select value={filtros.injetora} onChange={(e) => setFiltros({...filtros, injetora: e.target.value, cod_prod: 'Todos'})}>
+                    <select value={filtros.injetora} onChange={(e) => setFiltros({ ...filtros, injetora: e.target.value, cod_prod: 'Todos' })}>
                         <option value="Todos">Todas</option>
                         {[...new Set(rawDados.map(d => d.injetora))].map(inj => <option key={inj} value={inj}>{inj}</option>)}
                     </select>
 
                     <label>CÓD. PROD</label>
-                    <select value={filtros.cod_prod} disabled={filtros.injetora === 'Todos'} onChange={(e) => setFiltros({...filtros, cod_prod: e.target.value})}>
+                    <select value={filtros.cod_prod} disabled={filtros.injetora === 'Todos'} onChange={(e) => setFiltros({ ...filtros, cod_prod: e.target.value })}>
                         <option value="Todos">Todos</option>
                         {produtosDisponiveis.map(prod => <option key={prod} value={prod}>{prod}</option>)}
                     </select>
@@ -111,9 +119,9 @@ export default function Dashboard() {
                     <div className="checkbox-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '5px' }}>
                         {tiposDisponiveis.map(tipo => (
                             <label key={tipo} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '0.9rem' }}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={filtros.tipo.includes(tipo)} 
+                                <input
+                                    type="checkbox"
+                                    checked={filtros.tipo.includes(tipo)}
                                     onChange={() => toggleTipo(tipo)}
                                     style={{ marginRight: '8px' }}
                                 />

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { supabase } from '../servicos/clienteSupabase'; // Ajuste o caminho do seu cliente Supabase
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../servicos/clienteSupabase';
 import './Home.css';
 
-function Home({ user, isAdmin, onNavigate }) {
-  // Estados para o formulário de Login
+function Home({ user, isAdmin }) {
+  const navigate = useNavigate();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loginError, setLoginError] = useState('');
 
-  // Trata a submissão do login no Supabase
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoadingLogin(true);
@@ -33,26 +34,22 @@ function Home({ user, isAdmin, onNavigate }) {
     setLoadingLogin(false);
   };
 
-  // Trata o Logout
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
   return (
     <div className="home-screen">
-      {/* Banner de Boas-Vindas */}
       <div className="welcome-banner">
         <h1>Seja bem-vindo ao Painel de Produção</h1>
-        <p>Monitore o planejamento de carga máquina, eficiência de injetoras e acompanhe indicadores em tempo real.</p>
+        <p>Visão integrada da produtividade por máquina, identificação de paradas e monitoramento de eficiência operacional..</p>
       </div>
 
       <div className="home-grid">
-        {/* Painel Esquerdo: Guia de Navegação Dinâmica */}
         <div className="info-card">
           <h3>O que você deseja fazer?</h3>
           <div className="action-guide">
-            {/* Sempre visível para todos */}
-            <div className="guide-item" onClick={() => onNavigate('dashboard')}>
+            <div className="guide-item" onClick={() => navigate('/dashboard')}>
               <span className="guide-icon">📈</span>
               <div>
                 <h4>Visualizar Dashboard</h4>
@@ -60,9 +57,8 @@ function Home({ user, isAdmin, onNavigate }) {
               </div>
             </div>
             
-            {/* SÓ APARECE se o usuário estiver logado E for administrador */}
             {user && isAdmin && (
-              <div className="guide-item" onClick={() => onNavigate('importar')}>
+              <div className="guide-item" onClick={() => navigate('/importar')}>
                 <span className="guide-icon">📥</span>
                 <div>
                   <h4>Importar Carga Máquina</h4>
@@ -73,7 +69,6 @@ function Home({ user, isAdmin, onNavigate }) {
           </div>
         </div>
 
-        {/* Painel Direito: Status de Login / Formulário */}
         <div className="auth-card">
           {user ? (
             <div className="profile-logged-card">
@@ -86,11 +81,11 @@ function Home({ user, isAdmin, onNavigate }) {
               </div>
 
               {isAdmin ? (
-                <button className="btn-action-primary" onClick={() => onNavigate('importar')}>
+                <button className="btn-action-primary" onClick={() => navigate('/importar')}>
                   Ir para Importador
                 </button>
               ) : (
-                <button className="btn-action-primary" onClick={() => onNavigate('dashboard')}>
+                <button className="btn-action-primary" onClick={() => navigate('/dashboard')}>
                   Ir para Dashboard
                 </button>
               )}
@@ -101,17 +96,17 @@ function Home({ user, isAdmin, onNavigate }) {
             </div>
           ) : (
             <div className="login-form-wrapper">
-              <h3>Área do Administrador</h3>
-              <p className="login-subtitle">Faça login para liberar o importador de arquivos</p>
+              <h3>Acesso ao Sistema</h3>
+              <p className="login-subtitle">Faça login para continuar</p>
               
               {loginError && <div className="login-error-alert">{loginError}</div>}
               
               <form onSubmit={handleLogin} className="login-form">
                 <div className="form-group">
-                  <label>E-mail Corporativo</label>
+                  <label>E-mail</label>
                   <input 
                     type="email" 
-                    placeholder="exemplo@empresa.com" 
+                    placeholder="nome@empresa.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -119,7 +114,7 @@ function Home({ user, isAdmin, onNavigate }) {
                 </div>
                 
                 <div className="form-group">
-                  <label>Senha de Acesso</label>
+                  <label>Senha</label>
                   <input 
                     type="password" 
                     placeholder="••••••••" 
@@ -130,17 +125,16 @@ function Home({ user, isAdmin, onNavigate }) {
                 </div>
                 
                 <button type="submit" className="btn-submit" disabled={loadingLogin}>
-                  {loadingLogin ? 'Autenticando...' : 'Entrar como Admin'}
+                  {loadingLogin ? 'Autenticando...' : 'Entrar'}
                 </button>
               </form>
 
-              {/* Botão de redirecionamento para o Cadastro */}
               <div className="login-footer-actions">
                 <span className="separator-text">ou</span>
                 <button 
                   type="button" 
                   className="btn-link-cadastro" 
-                  onClick={() => onNavigate('cadastro')}
+                  onClick={() => navigate('/cadastro')}
                 >
                   Criar nova conta
                 </button>

@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { supabase } from '../servicos/clienteSupabase';
+import { parse, formatISO, isValid } from 'date-fns';
 import './ImportadorCarga.css';
 
-import { parse, formatISO, isValid } from 'date-fns';
-
 export default function ImportadorCarga() {
+  const navigate = useNavigate(); // Hook para navegação
   const [carregando, setCarregando] = useState(false);
   const [status, setStatus] = useState('');
   const [progressoMsg, setProgressoMsg] = useState('');
@@ -13,26 +14,28 @@ export default function ImportadorCarga() {
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
+  // Proteção para evitar que o usuário saia durante o upload
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (carregando) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [carregando]);
+
   const formatarData = (valor) => {
     if (!valor) return null;
-
-    // Se o Excel passar o valor como número (formato serial do Excel)
     if (typeof valor === 'number') {
       const dataJS = new Date((valor - 25569) * 86400 * 1000);
       return dataJS.toISOString();
     }
-
-    // Se for string, tentamos converter do formato BR "dd/MM/yyyy HH:mm:ss"
     if (typeof valor === 'string') {
-      // Tenta converter o formato "08/07/2026 00:00:06"
       const dataConvertida = parse(valor, 'dd/MM/yyyy HH:mm:ss', new Date());
-
-      // Se a data for válida, retorna no padrão ISO
-      if (isValid(dataConvertida)) {
-        return formatISO(dataConvertida);
-      }
+      if (isValid(dataConvertida)) return formatISO(dataConvertida);
     }
-
     return null;
   };
 
@@ -50,7 +53,7 @@ export default function ImportadorCarga() {
 
     setCarregando(true);
     setStatus('Iniciando...');
-    setProgressoMsg('Lendo planilha e verificando duplicatas no banco...');
+    setProgressoMsg('Lendo planilha e verificando duplicatas...');
     setPorcentagem(0);
 
     const reader = new FileReader();
@@ -109,115 +112,58 @@ export default function ImportadorCarga() {
 
         const totalLinhas = dadosFormatados.length;
         const totalNovos = dadosParaInserir.length;
-        const totalDuplicados = totalLinhas - totalNovos;
 
         if (totalNovos === 0) {
           setStatus('⚠️ Importação finalizada');
-          setProgressoMsg(`Nenhum dado novo. Todos os ${totalLinhas} registros já existem no banco.`);
+          setProgressoMsg(`Nenhum dado novo. Todos os ${totalLinhas} registros já existem.`);
           setPorcentagem(100);
-          setCarregando(false);
           return;
         }
 
-        setStatus(`Inserindo ${totalNovos} novos registros...`);
         const tamanhoLote = 500;
-
         for (let i = 0; i < totalNovos; i += tamanhoLote) {
           const lote = dadosParaInserir.slice(i, i + tamanhoLote);
-          setProgressoMsg(`Enviando lote ${Math.floor(i / tamanhoLote) + 1}...`);
-
-          const { error: insertError } = await supabase
-            .from('carga_maquina')
-            .insert(lote);
-
+          const { error: insertError } = await supabase.from('carga_maquina').insert(lote);
           if (insertError) throw insertError;
           setPorcentagem(Math.round(((i + lote.length) / totalNovos) * 100));
         }
 
         setStatus('✅ Importação concluída!');
-        setProgressoMsg(
-          totalDuplicados > 0
-            ? `Sucesso: ${totalNovos} registros novos adicionados. (${totalDuplicados} duplicados foram ignorados).`
-            : `Sucesso: ${totalNovos} registros adicionados.`
-        );
-        setPorcentagem(100);
-
+        setProgressoMsg(`Sucesso: ${totalNovos} registros adicionados.`);
       } catch (err) {
-        console.error(err);
         setStatus(`❌ Erro: ${err.message}`);
-        setPorcentagem(0);
       } finally {
         setCarregando(false);
         if (fileInputRef.current) fileInputRef.current.value = '';
       }
     };
-
     reader.readAsBinaryString(file);
-  };
-
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") setIsDragActive(true);
-    else if (e.type === "dragleave") setIsDragActive(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) processarArquivo(e.dataTransfer.files[0]);
-  };
-
-  const obterClasseStatus = () => {
-    if (!status) return '';
-    if (status.startsWith('✅')) return 'status-sucesso';
-    if (status.startsWith('❌')) return 'status-erro';
-    if (status.startsWith('⚠️')) return 'status-aviso';
-    return 'status-processando';
   };
 
   return (
     <div className="importador-container">
+      <button className="btn-voltar-home" onClick={() => navigate('/')}>← Voltar</button>
+      
       <div className="importador-card">
         <div className="importador-header">
-          <div className="icon-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.61 21.89A10 10 0 0 0 20 2.62" /><path d="M8.04 12c.31-2.24 2.3-4 4.71-4s4.4 1.76 4.71 4" /><path d="M18 16a6 6 0 0 0-6-6c-2.3 0-4.4 1.3-5.34 3.32" /><rect width="16" height="8" x="2" y="14" rx="2" /><path d="M6 18h.01" /></svg>
-          </div>
-          <div>
-            <h3 className="importador-titulo">Importador Carga Máquina</h3>
-            <p className="importador-subtitulo">Planejamento de produção direto para o banco de dados</p>
-          </div>
+          <h3>Importador Carga Máquina</h3>
         </div>
 
-        <hr className="divider" />
-
-        <div
-          className={`upload-dropzone ${isDragActive ? 'drag-active' : ''} ${carregando ? 'disabled' : ''}`}
-          onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop}
+        <div className={`upload-dropzone ${isDragActive ? 'drag-active' : ''} ${carregando ? 'disabled' : ''}`}
+          onDragEnter={(e) => { e.preventDefault(); setIsDragActive(true); }}
+          onDragLeave={() => setIsDragActive(false)}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => { e.preventDefault(); setIsDragActive(false); if (!carregando) processarArquivo(e.dataTransfer.files[0]); }}
           onClick={() => !carregando && fileInputRef.current.click()}
         >
-          <input ref={fileInputRef} type="file" accept=".xlsx, .xls" onChange={(e) => processarArquivo(e.target.files[0])} disabled={carregando} className="input-file-oculto" />
-          <div className="dropzone-content">
-            <p className="upload-text-principal">{carregando ? "Processando..." : "Arraste e solte o arquivo aqui"}</p>
-            <p className="upload-text-secundario">Ou clique para procurar</p>
-          </div>
+          <input ref={fileInputRef} type="file" accept=".xlsx, .xls" onChange={(e) => processarArquivo(e.target.files[0])} style={{ display: 'none' }} />
+          <p>{carregando ? "Processando..." : "Arraste o arquivo ou clique aqui"}</p>
         </div>
 
         {status && (
-          <div className={`status-container ${obterClasseStatus()}`}>
-            <div className="status-header-info">
-              <span className="status-mensagem-principal">{status}</span>
-              {progressoMsg && <span className="status-mensagem-secundaria">{progressoMsg}</span>}
-            </div>
-            {carregando && (
-              <div className="progress-bar-wrapper">
-                <div className="progress-bar-container">
-                  <div className="progress-bar-fill" style={{ width: `${porcentagem}%` }}></div>
-                </div>
-                <span className="progress-percentage">{porcentagem}%</span>
-              </div>
-            )}
+          <div className="status-container">
+            <p>{status}</p>
+            {carregando && <div className="progress-bar-fill" style={{ width: `${porcentagem}%` }}></div>}
           </div>
         )}
       </div>

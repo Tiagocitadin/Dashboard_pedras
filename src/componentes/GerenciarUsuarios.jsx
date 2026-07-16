@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importação do React Router
 import { supabase } from '../servicos/clienteSupabase';
 import './GerenciarUsuarios.css';
 
 function GerenciarUsuarios() {
+  const navigate = useNavigate(); // Hook para navegação
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
@@ -51,6 +53,11 @@ function GerenciarUsuarios() {
 
   return (
     <div className="gerenciar-usuarios-container">
+      {/* Botão de retorno adicionado para navegação via Router */}
+      <button className="btn-voltar-home" onClick={() => navigate('/')}>
+        ← Voltar para Home
+      </button>
+
       <div className="admin-header-block">
         <h2>Gerenciamento de Usuários</h2>
         <p>Altere permissões e níveis de acesso dos colaboradores cadastrados.</p>

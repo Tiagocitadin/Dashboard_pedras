@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase';
 
-function Login({ onNavigate }) {
+function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [carregando, setCarregando] = useState(false);
@@ -20,47 +22,64 @@ function Login({ onNavigate }) {
     if (error) {
       setMensagem(`Erro: ${error.message}`);
     } else {
-      onNavigate('home'); // Redireciona para o início após logar
+      navigate('/');
     }
     setCarregando(false);
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2>Acessar o Sistema</h2>
+    <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px', border: '1px solid #e2e8f0', borderRadius: '12px', backgroundColor: 'white' }}>
+      
+      {/* Botão Voltar Profissional */}
+      <button className="back-home-btn" onClick={() => navigate('/')} style={{ marginBottom: '20px' }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Voltar ao Início</span>
+      </button>
+
+      <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#1e293b' }}>Acessar o Sistema</h2>
+      
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>E-mail:</label>
+          <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>E-mail:</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+            style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0', boxSizing: 'border-box' }}
           />
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Senha:</label>
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>Senha:</label>
           <input
             type="password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+            style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0', boxSizing: 'border-box' }}
           />
         </div>
         <button 
           type="submit" 
           disabled={carregando}
-          style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          style={{ width: '100%', padding: '12px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}
         >
           {carregando ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
-      {mensagem && <p style={{ marginTop: '15px', color: 'red', textAlign: 'center' }}>{mensagem}</p>}
       
-      <p style={{ marginTop: '15px', textAlign: 'center' }}>
-        Não tem conta? <span onClick={() => onNavigate('cadastro')} style={{ color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}>Cadastre-se</span>
+      {mensagem && <p style={{ marginTop: '15px', color: '#ef4444', textAlign: 'center', fontSize: '0.9rem' }}>{mensagem}</p>}
+      
+      <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem' }}>
+        Não tem conta?{' '}
+        <span 
+          onClick={() => navigate('/cadastro')} 
+          style={{ color: '#3b82f6', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
+        >
+          Cadastre-se
+        </span>
       </p>
     </div>
   );
