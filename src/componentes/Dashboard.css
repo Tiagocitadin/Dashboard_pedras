@@ -16,12 +16,27 @@
   gap: 20px;
 }
 
-.brand-title { font-size: 1.25rem; color: #1e293b; margin: 0; }
+.brand-title {
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin: 0;
+}
 
-.filter-section { display: flex; flex-direction: column; gap: 12px; }
-.filter-section label { font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 8px; }
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-.filter-section input, .filter-section select {
+.filter-section label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.filter-section input,
+.filter-section select {
   padding: 10px;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -29,17 +44,29 @@
 }
 
 .clear-date-btn {
-  background: none; border: none; color: #ef4444; font-size: 0.7rem; cursor: pointer; font-weight: 700;
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 0.7rem;
+  cursor: pointer;
+  font-weight: 700;
 }
 
 /* Main Content */
-.main-content { padding: 32px 40px; }
-.dashboard-header h1 { margin: 0 0 24px 0; color: #0f172a; }
+.main-content {
+  padding: 32px 40px;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 24px 0;
+  color: #0f172a;
+}
 
 /* KPI Grid */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  /* Isso divide o grid em 3 colunas de tamanhos iguais */
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 32px;
 }
@@ -48,29 +75,87 @@
   background: white;
   padding: 20px;
   border-radius: 12px;
-  border-left: 4px solid #e2e8f0;
+  border-left: 4px solid #e2e8f0;  
+  /* Layout Flex Unificado */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Coloca ícone -> label -> valor um embaixo do outro */
+  align-items: center;    /* Centraliza horizontalmente */
+  justify-content: center; /* Centraliza verticalmente no card */
+  gap: 4px;               /* Espaçamento compacto e uniforme */
 }
 
-.kpi-card span { font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
-.kpi-card strong { font-size: 1.5rem; color: #0f172a; margin-top: 4px; }
-.kpi-card.highlight { border-left-color: #2563eb; }
+.kpi-card span {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.kpi-card strong {
+  font-size: 1.5rem;
+  color: #0f172a;
+  margin-top: 4px;
+}
+
+.kpi-card.highlight {
+  border-left-color: #2563eb;
+}
 
 /* Gráficos de Motivos */
-.chart-container { background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0; }
-.motivos-list { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+.chart-container {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
 
-.motivo-bar { display: flex; flex-direction: column; gap: 6px; }
-.label-row { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; }
-.progress-bg { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
-.progress-fill { height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease; }
+.motivos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.motivo-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.progress-bg {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
 
 /* Responsividade Mobile */
 @media (max-width: 1024px) {
-  .dashboard-container { grid-template-columns: 1fr; }
-  .sidebar { border-right: none; border-bottom: 1px solid #e2e8f0; }
-  .main-content { padding: 20px; }
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
 }
 
 /* Botão Voltar */

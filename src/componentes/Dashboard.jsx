@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase';
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
+import { CheckCircle2, XCircle, Gauge, Clock, PauseCircle, Calculator, Target } from 'lucide-react';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -12,6 +13,7 @@ export default function Dashboard() {
     const [filtros, setFiltros] = useState({
         injetora: 'Todos',
         cod_prod: 'Todos',
+        mp: 'Todos',
         tipo: [],
         dataInicio: '',
         dataFim: ''
@@ -43,10 +45,20 @@ export default function Dashboard() {
         return [...new Set(filtrado.map(d => d.cod_prod))];
     }, [rawDados, filtros.injetora]);
 
+    const mpsDisponiveis = useMemo(() => {
+        // Filtra considerando a injetora e o produto selecionado para ser mais preciso
+        const filtrado = rawDados.filter(d =>
+            (filtros.injetora === 'Todos' || d.injetora === filtros.injetora) &&
+            (filtros.cod_prod === 'Todos' || d.cod_prod === filtros.cod_prod)
+        );
+        return [...new Set(filtrado.map(d => d.mp))].filter(Boolean);
+    }, [rawDados, filtros.injetora, filtros.cod_prod]);
+
     const dadosFiltrados = useMemo(() => {
         return rawDados.filter(item => {
             const matchInjetora = filtros.injetora === 'Todos' || item.injetora === filtros.injetora;
             const matchCodProd = filtros.cod_prod === 'Todos' || item.cod_prod === filtros.cod_prod;
+            const matchMp = filtros.mp === 'Todos' || item.mp === filtros.mp; // <--- Nova regra
             const matchTipo = filtros.tipo.length === 0 || filtros.tipo.includes(item.tipo);
 
             let matchData = true;
@@ -63,7 +75,7 @@ export default function Dashboard() {
                     if (dataItem > fim) matchData = false;
                 }
             }
-            return matchInjetora && matchCodProd && matchTipo && matchData;
+            return matchInjetora && matchCodProd && matchMp && matchTipo && matchData;
         });
     }, [rawDados, filtros]);
 
@@ -115,6 +127,17 @@ export default function Dashboard() {
                         {produtosDisponiveis.map(prod => <option key={prod} value={prod}>{prod}</option>)}
                     </select>
 
+                    <label>MATÉRIA-PRIMA</label>
+                    <select
+                        value={filtros.mp}
+                        onChange={(e) => setFiltros({ ...filtros, mp: e.target.value })}
+                    >
+                        <option value="Todos">Todas</option>
+                        {mpsDisponiveis.map(mp => (
+                            <option key={mp} value={mp}>{mp}</option>
+                        ))}
+                    </select>
+
                     <label>TIPO</label>
                     <div className="checkbox-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '5px' }}>
                         {tiposDisponiveis.map(tipo => (
@@ -127,20 +150,51 @@ export default function Dashboard() {
                                 />
                                 {tipo}
                             </label>
+
                         ))}
                     </div>
+
                 </div>
             </aside>
 
             <main className="main-content">
                 <header className="dashboard-header"><h1>Dashboard de Produção</h1></header>
                 <section className="kpi-grid">
-                    <div className="kpi-card"><span>CONFORME</span><strong>{metrics?.totalConforme || 0}</strong></div>
-                    <div className="kpi-card"><span>DANIFICADAS</span><strong>{metrics?.totalDanificadas || 0}</strong></div>
-                    <div className="kpi-card highlight"><span>QUALIDADE</span><strong>{metrics?.qualidade || 0}%</strong></div>
-                    <div className="kpi-card"><span>HORA TRABALHADA</span><strong>{metrics?.horasTrabalhadas || 0}h</strong></div>
-                    <div className="kpi-card" style={{ borderColor: '#ef4444' }}><span>HORA PARADA</span><strong>{metrics?.horasParadas || 0}h</strong></div>
-                    <div className="kpi-card"><span>TOTAL</span><strong>{metrics?.horasTotais || 0}h</strong></div>
+                    <div className="kpi-card">
+                        <CheckCircle2 size={24} className="text-green-600" />
+                        <span>CONFORME</span>
+                        <strong>{metrics?.totalConforme || 0}</strong>
+                    </div>
+
+                    <div className="kpi-card">
+                        <XCircle size={20} className="text-red-600" />
+                        <span>DANIFICADAS</span>
+                        <strong>{metrics?.totalDanificadas || 0}</strong>
+                    </div>
+
+                    <div className="kpi-card">
+                        <Target size={20} className="text-blue-600" />
+                        <span>QUALIDADE</span>
+                        <strong>{metrics?.qualidade || 0} %</strong>
+                    </div>
+
+                    <div className="kpi-card">
+                        <Clock size={20} className="text-gray-600" />
+                        <span>HORA TRABALHADA</span>
+                        <strong>{metrics?.horasTrabalhadas || 0} h</strong>
+                    </div>
+
+                    <div className="kpi-card" style={{ borderColor: '#ef4444' }}>
+                        <PauseCircle size={20} className="text-red-500" />
+                        <span>HORA PARADA</span>
+                        <strong>{metrics?.horasParadas || 0} h</strong>
+                    </div>
+
+                    <div className="kpi-card">
+                        <Calculator size={20} className="text-gray-600" />
+                        <span>TOTAL DE HORAS</span>
+                        <strong>{metrics?.horasTotais || 0} h</strong>
+                    </div>
                 </section>
 
                 <section className="chart-container">
