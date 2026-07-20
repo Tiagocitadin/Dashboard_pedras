@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase'; 
 import './Cadastro.css';
@@ -12,14 +12,21 @@ function Cadastro() {
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
 
-    // Otimizado com useCallback para evitar recriação desnecessária da função a cada render
+    // Garante a limpeza forçada logo após a montagem do componente
+    useEffect(() => {
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setErrorMsg('');
+        setSuccessMsg('');
+    }, []);
+
     const handleRegister = useCallback(async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg('');
         setSuccessMsg('');
 
-        // Validação básica de senha no client-side
         if (password !== confirmPassword) {
             setErrorMsg('As senhas não coincidem.');
             setLoading(false);
@@ -32,14 +39,12 @@ function Cadastro() {
             return;
         }
 
-        // Registro no Supabase Auth
         const { error } = await supabase.auth.signUp({
             email,
             password,
         });
 
         if (error) {
-            // Traduz a mensagem do Supabase para o português se o e-mail já estiver cadastrado
             if (error.message.includes('User already registered')) {
                 setErrorMsg('Este usuário (e-mail) já está cadastrado.');
             } else {
@@ -70,7 +75,8 @@ function Cadastro() {
                 {errorMsg && <div className="register-alert error">{errorMsg}</div>}
                 {successMsg && <div className="register-alert success">{successMsg}</div>}
 
-                <form onSubmit={handleRegister} className="register-form">
+                {/* Adicionado autoComplete="off" no formulário e nos inputs */}
+                <form onSubmit={handleRegister} className="register-form" autoComplete="off">
                     <div className="form-group">
                         <label>E-mail Corporativo</label>
                         <input 
@@ -78,6 +84,8 @@ function Cadastro() {
                             placeholder="exemplo@empresa.com" 
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="off"
+                            name="no-auto-email"
                             required
                         />
                     </div>
@@ -89,6 +97,8 @@ function Cadastro() {
                             placeholder="Mínimo 6 caracteres" 
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="new-password"
+                            name="no-auto-password"
                             required
                         />
                     </div>
@@ -100,6 +110,8 @@ function Cadastro() {
                             placeholder="Digite a senha novamente" 
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            autoComplete="new-password"
+                            name="no-auto-confirm"
                             required
                         />
                     </div>

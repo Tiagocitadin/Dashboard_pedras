@@ -14,6 +14,27 @@ function Login() {
     setSenha('');
   }, []);
 
+  // Função auxiliar para traduzir erros comuns do Supabase para o português
+  const traduzirErroSupabase = (mensagemOriginal) => {
+    const msg = mensagemOriginal.toLowerCase();
+    
+    if (msg.includes('invalid login credentials')) {
+      return 'E-mail ou senha incorretos.';
+    }
+    if (msg.includes('email not confirmed')) {
+      return 'E-mail ainda não confirmado. Verifique sua caixa de entrada.';
+    }
+    if (msg.includes('user not found')) {
+      return 'Usuário não encontrado.';
+    }
+    if (msg.includes('too many requests')) {
+      return 'Muitas tentativas de login. Tente novamente mais tarde.';
+    }
+    
+    // Fallback caso seja um erro desconhecido
+    return 'Ocorreu um erro ao entrar. Verifique seus dados.';
+  };
+
   // Otimizado com useCallback para evitar recriação a cada render
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
@@ -26,7 +47,7 @@ function Login() {
     });
 
     if (error) {
-      setMensagem(`Erro: ${error.message}`);
+      setMensagem(traduzirErroSupabase(error.message));
       setSenha(''); // Limpa a senha também caso ocorra erro de credencial
     } else {
       navigate('/');

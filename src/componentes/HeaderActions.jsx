@@ -42,7 +42,7 @@ function HeaderActions({ user, isAdmin }) {
           </div>
         ) : (
           <button className="nav-link active" onClick={handleLogin}>
-            Entrar
+            Login
           </button>
         )}
       </div>

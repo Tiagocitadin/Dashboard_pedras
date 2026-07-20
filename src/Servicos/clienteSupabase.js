@@ -1,11 +1,11 @@
 // src/servicos/clienteSupabase.js
 import { createClient } from '@supabase/supabase-js';
 
-// Tenta carregar do .env; se não encontrar, usa as chaves diretamente como fallback
-const urlSupabase = import.meta.env.VITE_SUPABASE_URL || 'https://gachmmrloqgccmwguter.supabase.co';
-const chaveAnonSupabase = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_YcJpLUnjk5aXyPX2P7QKfw_YY8L8GlI';
+// Carrega as credenciais estritamente das variáveis de ambiente
+const urlSupabase = import.meta.env.VITE_SUPABASE_URL;
+const chaveAnonSupabase = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Validação de segurança simples para alertar caso falte alguma credencial
+// Validação de segurança para alertar caso faltem as credenciais no .env
 if (!urlSupabase || !chaveAnonSupabase) {
   console.warn(
     "⚠️ Atenção: As credenciais do Supabase não foram encontradas no seu arquivo .env. " +
