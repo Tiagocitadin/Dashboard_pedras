@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase';
 
@@ -9,7 +9,13 @@ function Login() {
   const [carregando, setCarregando] = useState(false);
   const [mensagem, setMensagem] = useState('');
 
-  const handleLogin = async (e) => {
+  // Limpa o campo de senha sempre que a tela de login é aberta/montada
+  useEffect(() => {
+    setSenha('');
+  }, []);
+
+  // Otimizado com useCallback para evitar recriação a cada render
+  const handleLogin = useCallback(async (e) => {
     e.preventDefault();
     setCarregando(true);
     setMensagem('');
@@ -21,17 +27,22 @@ function Login() {
 
     if (error) {
       setMensagem(`Erro: ${error.message}`);
+      setSenha(''); // Limpa a senha também caso ocorra erro de credencial
     } else {
       navigate('/');
     }
     setCarregando(false);
-  };
+  }, [email, senha, navigate]);
+
+  // Handlers de navegação otimizados
+  const handleVoltar = useCallback(() => navigate('/'), [navigate]);
+  const handleCadastro = useCallback(() => navigate('/cadastro'), [navigate]);
 
   return (
     <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px', border: '1px solid #e2e8f0', borderRadius: '12px', backgroundColor: 'white' }}>
       
       {/* Botão Voltar Profissional */}
-      <button className="back-home-btn" onClick={() => navigate('/')} style={{ marginBottom: '20px' }}>
+      <button className="back-home-btn" onClick={handleVoltar} style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', cursor: 'pointer', color: '#475569', fontWeight: '500' }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -64,7 +75,7 @@ function Login() {
         <button 
           type="submit" 
           disabled={carregando}
-          style={{ width: '100%', padding: '12px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}
+          style={{ width: '100%', padding: '12px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', opacity: carregando ? 0.7 : 1 }}
         >
           {carregando ? 'Entrando...' : 'Entrar'}
         </button>
@@ -75,7 +86,7 @@ function Login() {
       <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem' }}>
         Não tem conta?{' '}
         <span 
-          onClick={() => navigate('/cadastro')} 
+          onClick={handleCadastro} 
           style={{ color: '#3b82f6', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
         >
           Cadastre-se

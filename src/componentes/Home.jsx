@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../servicos/clienteSupabase';
 import './Home.css';
@@ -11,7 +11,7 @@ function Home({ user, isAdmin }) {
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loginError, setLoginError] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleLogin = useCallback(async (e) => {
     e.preventDefault();
     setLoadingLogin(true);
     setLoginError('');
@@ -27,29 +27,35 @@ function Home({ user, isAdmin }) {
           ? 'Credenciais inválidas. Verifique seu e-mail e senha.' 
           : error.message
       );
+      setPassword(''); // Limpa apenas a senha em caso de erro, mantendo o e-mail
     } else {
-      setEmail('');
-      setPassword('');
+      setPassword(''); // Limpa a senha após o login com sucesso (o e-mail pode ser limpo se desejar, mas mantemos conforme solicitado)
     }
     setLoadingLogin(false);
-  };
+  }, [email, password]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await supabase.auth.signOut();
-  };
+    setPassword(''); // Limpa a senha ao deslogar
+  }, []);
+
+  const goToDashboard = useCallback(() => navigate('/dashboard'), [navigate]);
+  const goToImportar = useCallback(() => navigate('/importar'), [navigate]);
+  const goToUsuarios = useCallback(() => navigate('/usuarios'), [navigate]);
+  const goToCadastro = useCallback(() => navigate('/cadastro'), [navigate]);
 
   return (
     <div className="home-screen">
       <div className="welcome-banner">
         <h1>Seja bem-vindo ao Painel de Produção</h1>
-        <p>Visão integrada da produtividade por máquina, identificação de paradas e monitoramento de eficiência operacional..</p>
+        <p>Visão integrada da produtividade por máquina, identificação de paradas e monitoramento de eficiência operacional.</p>
       </div>
 
       <div className="home-grid">
         <div className="info-card">
           <h3>O que você deseja fazer?</h3>
           <div className="action-guide">
-            <div className="guide-item" onClick={() => navigate('/dashboard')}>
+            <div className="guide-item" onClick={goToDashboard}>
               <span className="guide-icon">📈</span>
               <div>
                 <h4>Visualizar Dashboard</h4>
@@ -58,13 +64,23 @@ function Home({ user, isAdmin }) {
             </div>
             
             {user && isAdmin && (
-              <div className="guide-item" onClick={() => navigate('/importar')}>
-                <span className="guide-icon">📥</span>
-                <div>
-                  <h4>Importar Carga Máquina</h4>
-                  <p>Envio em massa de planilhas de programação de injetoras.</p>
+              <>
+                <div className="guide-item" onClick={goToImportar}>
+                  <span className="guide-icon">📥</span>
+                  <div>
+                    <h4>Importar Carga Máquina</h4>
+                    <p>Envio em massa de planilhas de programação de injetoras.</p>
+                  </div>
                 </div>
-              </div>
+
+                <div className="guide-item" onClick={goToUsuarios}>
+                  <span className="guide-icon">👥</span>
+                  <div>
+                    <h4>Gerenciar Usuários</h4>
+                    <p>Controle permissões, níveis de acesso e perfis de colaboradores.</p>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -81,11 +97,16 @@ function Home({ user, isAdmin }) {
               </div>
 
               {isAdmin ? (
-                <button className="btn-action-primary" onClick={() => navigate('/importar')}>
-                  Ir para Importador
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                  <button className="btn-action-primary" onClick={goToImportar}>
+                    Ir para Importador
+                  </button>
+                  <button className="btn-action-primary" onClick={goToUsuarios} style={{ backgroundColor: '#2b6cb0' }}>
+                    Gerenciar Usuários
+                  </button>
+                </div>
               ) : (
-                <button className="btn-action-primary" onClick={() => navigate('/dashboard')}>
+                <button className="btn-action-primary" onClick={goToDashboard}>
                   Ir para Dashboard
                 </button>
               )}
@@ -120,6 +141,7 @@ function Home({ user, isAdmin }) {
                     placeholder="••••••••" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
                     required
                   />
                 </div>
@@ -134,7 +156,7 @@ function Home({ user, isAdmin }) {
                 <button 
                   type="button" 
                   className="btn-link-cadastro" 
-                  onClick={() => navigate('/cadastro')}
+                  onClick={goToCadastro}
                 >
                   Criar nova conta
                 </button>

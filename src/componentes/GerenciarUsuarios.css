@@ -90,3 +90,25 @@
   .usuarios-table th, .usuarios-table td { padding: 12px; font-size: 13px; }
   .btn-change-role { padding: 6px 10px; }
 }
+
+.btn-voltar-home {
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.btn-voltar-home:hover {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
+}

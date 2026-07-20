@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importação do React Router
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
 import { supabase } from '../servicos/clienteSupabase';
 import './GerenciarUsuarios.css';
 
 function GerenciarUsuarios() {
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
 
-  // Busca todos os perfis cadastrados no banco
-  const carregarUsuarios = async () => {
-    setLoading(true);
+  // Busca inicial otimizada
+  const carregarUsuarios = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('perfis')
-        .select('*')
+        .select('id, email, regra')
         .order('email', { ascending: true });
 
       if (error) throw error;
@@ -25,37 +25,82 @@ function GerenciarUsuarios() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     carregarUsuarios();
-  }, []);
+  }, [carregarUsuarios]);
 
-  // Altera a regra do usuário no banco de dados
-  const alterarRegra = async (usuarioId, novaRegra) => {
+  // Atualização Otimista: A interface muda na hora, a requisição corre em background
+  const alterarRegra = useCallback(async (usuarioId, novaRegra) => {
+    // 1. Atualiza visualmente na hora (feedback instantâneo)
+    setUsuarios((prev) =>
+      prev.map((u) => (u.id === usuarioId ? { ...u, regra: novaRegra } : u))
+    );
+    setMensagem({ tipo: 'sucesso', texto: 'Nível de acesso atualizado com sucesso!' });
+
     try {
+      // 2. Envia para o Supabase em background
       const { error } = await supabase
         .from('perfis')
         .update({ regra: novaRegra })
         .eq('id', usuarioId);
 
-      if (error) throw error;
-
-      // Atualiza o estado local para refletir a mudança na tela imediatamente
-      setUsuarios((prev) =>
-        prev.map((u) => (u.id === usuarioId ? { ...u, regra: novaRegra } : u))
-      );
-      setMensagem({ tipo: 'sucesso', texto: 'Nível de acesso atualizado com sucesso!' });
+      if (error) {
+        // Se der erro no banco, reverte a alteração visual
+        carregarUsuarios();
+        throw error;
+      }
     } catch (error) {
       setMensagem({ tipo: 'erro', texto: `Erro ao atualizar nível: ${error.message}` });
     }
-  };
+  }, [carregarUsuarios]);
+
+  // Renderização otimizada das linhas da tabela
+  const linhasTabela = useMemo(() => {
+    if (usuarios.length === 0) {
+      return (
+        <tr>
+          <td colSpan="3" style={{ textAlign: 'center', padding: '24px' }}>
+            Nenhum usuário cadastrado encontrado.
+          </td>
+        </tr>
+      );
+    }
+
+    return usuarios.map((user) => (
+      <tr key={user.id}>
+        <td className="user-email-col">{user.email}</td>
+        <td>
+          <span className={`badge-role ${user.regra}`}>
+            {user.regra === 'admin' ? 'Administrador' : 'Operador'}
+          </span>
+        </td>
+        <td style={{ textAlign: 'center' }}>
+          {user.regra === 'admin' ? (
+            <button
+              className="btn-change-role op"
+              onClick={() => alterarRegra(user.id, 'operador')}
+            >
+              Rebaixar para Operador
+            </button>
+          ) : (
+            <button
+              className="btn-change-role adm"
+              onClick={() => alterarRegra(user.id, 'admin')}
+            >
+              Promover a Admin
+            </button>
+          )}
+        </td>
+      </tr>
+    ));
+  }, [usuarios, alterarRegra]);
 
   return (
-    <div className="gerenciar-usuarios-container">
-      {/* Botão de retorno adicionado para navegação via Router */}
+    <div className="gerenciar-usuarios-container">    
       <button className="btn-voltar-home" onClick={() => navigate('/')}>
-        ← Voltar para Home
+         <FiArrowLeft /> <span>Voltar ao Início</span>
       </button>
 
       <div className="admin-header-block">
@@ -83,41 +128,7 @@ function GerenciarUsuarios() {
               </tr>
             </thead>
             <tbody>
-              {usuarios.length === 0 ? (
-                <tr>
-                  <td colSpan="3" style={{ textAlign: 'center', padding: '24px' }}>
-                    Nenhum usuário cadastrado encontrado.
-                  </td>
-                </tr>
-              ) : (
-                usuarios.map((user) => (
-                  <tr key={user.id}>
-                    <td className="user-email-col">{user.email}</td>
-                    <td>
-                      <span className={`badge-role ${user.regra}`}>
-                        {user.regra === 'admin' ? 'Administrador' : 'Operador'}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      {user.regra === 'admin' ? (
-                        <button
-                          className="btn-change-role op"
-                          onClick={() => alterarRegra(user.id, 'operador')}
-                        >
-                          Rebaixar para Operador
-                        </button>
-                      ) : (
-                        <button
-                          className="btn-change-role adm"
-                          onClick={() => alterarRegra(user.id, 'admin')}
-                        >
-                          Promover a Admin
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
+              {linhasTabela}
             </tbody>
           </table>
         </div>
