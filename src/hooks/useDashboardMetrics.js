@@ -51,12 +51,12 @@ export const useDashboardMetrics = (dados) => {
 
         // Cálculo de Horas Trabalhadas
         const horasTrabalhadasDec = safeDados
-            .filter(cur => cur.status && cur.status.trim().toLowerCase() === 'produzindo')
+            .filter(cur => cur.status && cur.status.trim().toLowerCase() === 'Produzindo' || 'produzindo')
             .reduce((acc, cur) => acc + converterTempoParaHoras(cur.tempo), 0);
 
         // Cálculo de Horas Paradas (Indisponível)
         const horasParadasDec = safeDados
-            .filter(cur => cur.status && cur.status.trim().toLowerCase() === 'indisponível')
+            .filter(cur => cur.status && cur.status.trim().toLowerCase() === 'Indisponível' || 'indisponível')
             .reduce((acc, cur) => acc + converterTempoParaHoras(cur.tempo), 0);
 
         // Cálculo de Horas Totais
