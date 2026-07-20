@@ -1,38 +1,109 @@
-/* Container que força o empurramento para a direita */
-.user-logged-info-right {
+/* Navbar principal com gradiente combinando com a identidade visual e largura total */
+.main-navbar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  
+  /* Gradiente moderno e limpo */
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  
+  padding: 1rem 2rem !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  
+  /* Correção de largura e posicionamento sem margens indesejadas */
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Marca (Logo) */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo-img {
+  height: 28px; /* Ajuste o tamanho da logo aqui se precisar */
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Seção de Autenticação */
+.navbar-auth-section {
+  display: flex;
+  align-items: center;
+}
+
+.user-logged-info {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-left: auto; /* ESTA LINHA É A CHAVE: ela empurra o elemento para o canto direito */
-  margin-right: 20px; /* Espaço para não encostar na borda da tela */
+  flex-wrap: nowrap;
 }
 
-/* Ajustes para o nome e elementos internos */
-.user-name {
-  font-size: 14px;
+.user-email {
   font-weight: 600;
-  color: #1e293b;
+  color: #334155;
+  font-size: 0.95rem;
   white-space: nowrap;
 }
 
+/* Badges */
 .admin-badge {
-  background-color: #fef3c7;
-  color: #92400e;
-  font-size: 10px;
-  font-weight: 700;
+  background-color: #eff6ff;
+  color: #3b82f6;
+  font-size: 0.75rem;
   padding: 2px 8px;
-  border-radius: 10px;
-  border: 1px solid #fde68a;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  white-space: nowrap;
   text-transform: uppercase;
 }
 
-.btn-logout {
-  background: #f1f5f9;
+.guest-badge {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
   border: 1px solid #e2e8f0;
-  color: #64748b;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
+  white-space: nowrap;
 }
 
+/* Botões */
+.btn-logout {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #fecaca;
+}
+
+.nav-link.active {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.nav-link.active:hover {
+  background-color: #2563eb;
+}

@@ -41,12 +41,8 @@ function App() {
   return (
     <Router>
       <div className="app-layout">
-        <nav className="main-navbar">
-          {/* HeaderActions agora não precisa de onNavigate */}
-          <div className="navbar-auth-section">
-            <HeaderActions user={user} isAdmin={isAdmin} />
-          </div>
-        </nav>
+        {/* Renderizado de ponta a ponta sem wrappers restritivos */}
+        <HeaderActions user={user} isAdmin={isAdmin} />
 
         <main className="main-content">
           <Routes>

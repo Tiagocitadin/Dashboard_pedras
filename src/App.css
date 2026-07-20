@@ -1,48 +1,90 @@
-/* --- ESTILOS DE LAYOUT DA HOME (ISOLADOS COM CLASSES) --- */
-
-.home-center {
+.app-navbar {
   display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-}
-
-.home-next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-}
-
-.home-next-steps > div {
-  flex: 1 1 0;
-  padding: 32px;
-}
-
-/* --- REGRAS PARA O HEADER E PROTEÇÃO DE LAYOUT --- */
-
-/* Garante que o Header ou Navbar não seja afetado pelo display flex do #center */
-header, 
-.navbar {
-  display: flex; 
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  
+  /* Solução definitiva sem estourar a tela */
   width: 100%;
-  flex-shrink: 0; /* Impede que o header encolha */
+  margin: 0;
+  box-sizing: border-box;
 }
 
-/* --- ESTILOS GERAIS E UTILS --- */
-
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+.navbar-brand h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #1e293b;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: color 0.2s;
 }
 
-/* ... (Mantenha o restante das classes .hero, .ticks, .btn-voltar-home aqui) ... */
+.navbar-brand h2:hover {
+  color: #3b82f6;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.user-logged-info-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.admin-badge {
+  background-color: #eff6ff;
+  color: #3b82f6;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #fecaca;
+}
+
+.btn-login-nav {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-login-nav:hover {
+  background-color: #2563eb;
+}

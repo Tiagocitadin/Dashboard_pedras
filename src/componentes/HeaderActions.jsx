@@ -6,33 +6,47 @@ import './HeaderActions.css';
 function HeaderActions({ user, isAdmin }) {
   const navigate = useNavigate();
 
-  // Otimizado com useCallback para evitar recriação da função a cada render
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut();
     navigate('/');
   }, [navigate]);
 
-  // Otimiza o recorte do nome do usuário usando useMemo
   const userName = useMemo(() => {
     if (!user || !user.email) return '';
     return user.email.split('@')[0];
   }, [user]);
 
-  // Se não houver usuário logado, retorna null imediatamente
-  if (!user) {
-    return null;
-  }
+  const handleHome = useCallback(() => navigate('/'), [navigate]);
+  const handleLogin = useCallback(() => navigate('/login'), [navigate]);
 
   return (
-    <div className="user-logged-info-right">
-      <span className="user-name">
-        {userName}
-      </span>
-      {isAdmin && <span className="admin-badge">Admin</span>}
-      <button className="btn-logout" onClick={handleLogout}>
-        Sair
-      </button>
-    </div>
+    <header className="main-navbar">
+      {/* Lado Esquerdo: Marca (Logo e Nome) */}
+      <div className="navbar-brand">
+        <img src="/Logo_Pedrasplast.png" alt="Logo" className="brand-logo-img" />
+      </div>
+
+      {/* Lado Direito: Seção de Autenticação */}
+      <div className="navbar-auth-section">
+        {user ? (
+          <div className="user-logged-info">
+            <span className="user-email">{userName}</span>
+            {isAdmin ? (
+              <span className="admin-badge">Admin</span>
+            ) : (
+              <span className="guest-badge">Operador</span>
+            )}
+            <button className="btn-logout" onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
+        ) : (
+          <button className="nav-link active" onClick={handleLogin}>
+            Entrar
+          </button>
+        )}
+      </div>
+    </header>
   );
 }
 
