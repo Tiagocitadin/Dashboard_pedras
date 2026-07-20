@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../servicos/clienteSupabase';
+import { supabase } from '../Servicos/clienteSupabase';
 import './Home.css';
 
 function Home({ user, isAdmin }) {

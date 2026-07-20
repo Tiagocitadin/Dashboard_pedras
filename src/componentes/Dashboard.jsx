@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../servicos/clienteSupabase';
+import { supabase } from '../Servicos/clienteSupabase';
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 import { CheckCircle2, XCircle, Gauge, Clock, PauseCircle, Calculator, Target } from 'lucide-react';
 import './Dashboard.css';

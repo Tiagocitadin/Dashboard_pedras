@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
-import { supabase } from '../servicos/clienteSupabase';
+import { supabase } from '../Servicos/clienteSupabase';
 import './GerenciarUsuarios.css';
 
 function GerenciarUsuarios() {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
-import { supabase } from '../servicos/clienteSupabase';
+import { supabase } from '../Servicos/clienteSupabase';
 import { parse, formatISO, isValid } from 'date-fns';
 import { FiArrowLeft } from 'react-icons/fi';
 import './ImportadorCarga.css';

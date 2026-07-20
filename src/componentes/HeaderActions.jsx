@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../servicos/clienteSupabase';
+import { supabase } from '../Servicos/clienteSupabase';
 import './HeaderActions.css';
 
 function HeaderActions({ user, isAdmin }) {
