@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { supabase } from './servicos/clienteSupabase';
+import { supabase } from './Servicos/clienteSupabase';
 
 import Home from './componentes/Home';
 import ImportadorCarga from './componentes/ImportadorCarga';
