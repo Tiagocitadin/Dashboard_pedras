@@ -33,10 +33,22 @@ export default function ImportadorCarga() {
       return dataJS.toISOString().split('T')[0];
     }
     if (typeof valor === 'string') {
-      const dataConvertida = parse(valor, 'dd/MM/yyyy', new Date());
+      let dataConvertida = parse(valor.trim(), 'dd/MM/yyyy HH:mm:ss', new Date());
+      if (isValid(dataConvertida)) return formatISO(dataConvertida, { representation: 'date' });
+
+      dataConvertida = parse(valor.trim(), 'dd/MM/yyyy', new Date());
       if (isValid(dataConvertida)) return formatISO(dataConvertida, { representation: 'date' });
     }
     return null;
+  };
+
+  const parseNumero = (valor) => {
+    if (valor === undefined || valor === null || valor === '') return 0;
+    if (typeof valor === 'number') return valor;
+    
+    const limpo = String(valor).trim().replace(',', '.');
+    const resultado = parseFloat(limpo);
+    return isNaN(resultado) ? 0 : resultado;
   };
 
   const processarArquivo = async (file) => {
@@ -53,31 +65,60 @@ export default function ImportadorCarga() {
         const workbook = XLSX.read(data, { type: 'binary' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(sheet);
-        
+
         if (rows.length === 0) throw new Error("A planilha está vazia.");
 
         const dadosFormatados = rows.map((linha) => {
+          // Função auxiliar para buscar a coluna independentemente de maiúsculas/minúsculas ou pequenos espaços
+          const getVal = (chavesPossiveis) => {
+            const chaveEncontrada = Object.keys(linha).find(k => 
+              chavesPossiveis.some(cp => k.trim().toLowerCase() === cp.toLowerCase())
+            );
+            return chaveEncontrada !== undefined ? linha[chaveEncontrada] : '';
+          };
+
           if (tabelaDestino === 'ciclo_injetora') {
             return {
-              injetora: String(linha['Injetora'] || ''),
-              data: formatarData(linha['Data']),
-              cod_produto: String(linha['Cód. Produto'] || ''),
-              descricao: String(linha['Descrição'] || ''),
-              cavidade_molde: parseInt(linha['Cavidade Molde'] || 0),
-              tempo_resfriamento: String(linha['Tempo de Resfriamento'] || ''),
-              ciclo: String(linha['Ciclo'] || ''),
-              tempo_injecao: String(linha['Tempo de Injeção'] || ''),
-              kg_un: parseFloat(linha['Kg UN'] || 0),
-              kg_haste: parseFloat(linha['Kg HASTE'] || 0),
-              observacao: String(linha['Observação'] || '')
+              injetora: String(getVal(['Injetora']) || ''),
+              data: formatarData(getVal(['Data'])),
+              cod_produto: String(getVal(['Cód. Produto', 'Cod. Produto', 'Cod Produto', 'Codigo Produto']) || ''),
+              descricao: String(getVal(['Descrição', 'Descricao']) || ''),
+              cavidade_molde: parseInt(parseNumero(getVal(['Cavidade Molde', 'Cavidade']))),
+              tempo_resfriamento: String(getVal(['Tempo de Resfriamento', 'Resfriamento']) || ''),
+              ciclo: String(getVal(['Ciclo']) || ''),
+              tempo_injecao: String(getVal(['Tempo de Injeção', 'Tempo Injecao']) || ''),
+              kg_un: parseNumero(getVal(['Kg UN', 'KG UN', 'Kg/Un'])),
+              kg_haste: parseNumero(getVal(['Kg HASTE', 'KG HASTE', 'Kg/Haste'])),
+              observacao: String(getVal(['Observação', 'Observacao', 'Obs']) || '')
             };
           } else {
-            // Ajustado para garantir que enviamos apenas colunas reconhecidas pelo seu banco
             return {
-              cod_prod: String(linha['Cód.Prod'] || ''),
-              injetora: String(linha['Injetora'] || ''),
-              inicio: formatarData(linha['Início']),
-              cliente: String(linha['Cliente'] || '') 
+              cod_prod: String(getVal(['Cód.Prod', 'Cod. Prod', 'Cod Prod', 'Cód. Produto', 'Cod_Prod']) || ''),
+              injetora: String(getVal(['Injetora']) || ''),
+              inicio: formatarData(getVal(['Início', 'Inicio'])),
+              fim: formatarData(getVal(['Fim', 'Término', 'Termino'])),
+              duracao: String(getVal(['Duração', 'Duracao', 'Tempo']) || ''),
+              op: String(getVal(['OP', 'Ordem', 'Ordem Producao']) || ''),
+              tipo: String(getVal(['Tipo']) || ''),
+              motivo: String(getVal(['Motivo']) || ''),
+              justificativa: String(getVal(['Justificativa']) || ''),
+              celula: String(getVal(['Célula', 'Celula']) || ''),
+              operador: String(getVal(['Operador']) || ''),
+              material: String(getVal(['Material']) || ''),
+              qtde_perdida_devido_pausa: parseNumero(getVal(['Qtde perdida devido pausa', 'Qtde Perdida Devido Pausa'])),
+              cliente: String(getVal(['Cliente']) || ''),
+              status: String(getVal(['Status']) || ''),
+              lista_de_data: formatarData(getVal(['ListaDeData', 'Lista De Data'])),
+              inicio_dia: formatarData(getVal(['InicioDia', 'Início Dia', 'InícioDia'])),
+              fim_dia: formatarData(getVal(['FimDia', 'Fim Dia'])),
+              tempo: String(getVal(['Tempo']) || ''),
+              conforme: parseInt(parseNumero(getVal(['Conforme']))),
+              danificada: parseInt(parseNumero(getVal(['Danificada']))),
+              mp: String(getVal(['M.P', 'MP']) || ''),
+              pecas: parseInt(parseNumero(getVal(['Peças', 'Pecas']))),
+              no_injetora: String(getVal(['№ Injetora', 'No Injetor', 'Nº Injetora']) || ''),
+              peso: parseNumero(getVal(['Peso'])),
+              consumido: parseNumero(getVal(['Consumido']))
             };
           }
         });
@@ -114,9 +155,9 @@ export default function ImportadorCarga() {
 
         <div className="select-tabela">
           <label>Selecione a tabela de destino:</label>
-          <select 
-            value={tabelaDestino} 
-            onChange={(e) => setTabelaDestino(e.target.value)} 
+          <select
+            value={tabelaDestino}
+            onChange={(e) => setTabelaDestino(e.target.value)}
             disabled={carregando}
           >
             <option value="carga_maquina">Carga Máquina</option>
