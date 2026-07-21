@@ -127,37 +127,37 @@ export default function Dashboard() {
                 <section className="kpi-grid">
 
                     <div className="kpi-card verde">
-                        <CheckCircle2 size={24} className="text-green-600" />
+                        <CheckCircle2 size={24} color="#16a34a" />
                         <span>CONFORME</span>
                         <strong>{Number(metrics?.totalConforme || 0).toLocaleString('pt-BR')}</strong>
                     </div>
 
                     <div className="kpi-card vermelho">
-                        <XCircle size={20} className="text-red-600" />
+                        <XCircle size={20} color="#dc2626" />
                         <span>DANIFICADAS</span>
                         <strong>{Number(metrics?.totalDanificadas || 0).toLocaleString('pt-BR')}</strong>
                     </div>
 
                     <div className="kpi-card verde">
-                        <Target size={20} className="text-blue-600" />
+                        <Target size={20} color="#3b82f6" />
                         <span>QUALIDADE</span>
                         <strong>{Number(metrics?.qualidade || 0).toFixed(2)} %</strong>
                     </div>
 
                     <div className="kpi-card verde">
-                        <Clock size={20} className="text-gray-600" />
+                        <Clock size={20} color="#6b7280" />
                         <span>HORA TRABALHADA</span>
                         <strong>{metrics?.horasTrabalhadas || 0} hrs</strong>
                     </div>
 
                     <div className="kpi-card vermelho">
-                        <PauseCircle size={20} className="text-red-500" />
+                        <PauseCircle size={20} color="#dc2626" />
                         <span>HORA PARADA</span>
                         <strong>{metrics?.horasParadas || 0} hrs</strong>
                     </div>
 
                     <div className="kpi-card verde">
-                        <Calculator size={20} className="text-gray-600" />
+                        <Calculator size={20} color="#6b7280" />
                         <span>TOTAL DE HORAS</span>
                         <strong>{metrics?.horasTotais || 0} hrs</strong>
                     </div>
