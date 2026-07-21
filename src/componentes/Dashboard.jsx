@@ -112,7 +112,7 @@ export default function Dashboard() {
                 <h2 className="brand-title">Pedrasplast</h2>
 
                 {/* Componente de Filtros Reutilizável com a flag exibirMp={false} */}
-                <FiltrosDashboard 
+                <FiltrosDashboard
                     filtros={filtros}
                     setFiltros={setFiltros}
                     tiposDisponiveis={tiposDisponiveis}
@@ -125,37 +125,38 @@ export default function Dashboard() {
             <main className="main-content">
                 <header className="dashboard-header"><h1>Dashboard de Produção</h1></header>
                 <section className="kpi-grid">
-                    <div className="kpi-card" style={{ borderColor: '#013913' }}>
+
+                    <div className="kpi-card verde">
                         <CheckCircle2 size={24} className="text-green-600" />
                         <span>CONFORME</span>
                         <strong>{Number(metrics?.totalConforme || 0).toLocaleString('pt-BR')}</strong>
                     </div>
 
-                    <div className="kpi-card" style={{ borderColor: '#ef4444' }}>
+                    <div className="kpi-card vermelho">
                         <XCircle size={20} className="text-red-600" />
                         <span>DANIFICADAS</span>
                         <strong>{Number(metrics?.totalDanificadas || 0).toLocaleString('pt-BR')}</strong>
                     </div>
 
-                    <div className="kpi-card" style={{ borderColor: '#013913' }}>
+                    <div className="kpi-card verde">
                         <Target size={20} className="text-blue-600" />
                         <span>QUALIDADE</span>
                         <strong>{Number(metrics?.qualidade || 0).toFixed(2)} %</strong>
                     </div>
 
-                    <div className="kpi-card" style={{ borderColor: '#013913' }}>
+                    <div className="kpi-card verde">
                         <Clock size={20} className="text-gray-600" />
                         <span>HORA TRABALHADA</span>
                         <strong>{metrics?.horasTrabalhadas || 0} hrs</strong>
                     </div>
 
-                    <div className="kpi-card" style={{ borderColor: '#ef4444' }}>
+                    <div className="kpi-card vermelho">
                         <PauseCircle size={20} className="text-red-500" />
                         <span>HORA PARADA</span>
                         <strong>{metrics?.horasParadas || 0} hrs</strong>
                     </div>
 
-                    <div className="kpi-card" style={{ borderColor: '#013913' }}>
+                    <div className="kpi-card verde">
                         <Calculator size={20} className="text-gray-600" />
                         <span>TOTAL DE HORAS</span>
                         <strong>{metrics?.horasTotais || 0} hrs</strong>
@@ -172,7 +173,12 @@ export default function Dashboard() {
                                     <span>{item.formattedValue}</span>
                                 </div>
                                 <div className="progress-bg">
-                                    <div className="progress-fill" style={{ width: `${Math.min((item.value / 10) * 100, 100)}%` }} />
+                                    <div
+                                        className="progress-fill"
+                                        style={{
+                                            width: `${metrics?.motivos?.length > 0 ? (item.value / (metrics.motivos[0].value * 1.15)) * 100 : 0}%`
+                                        }}
+                                    />
                                 </div>
                             </div>
                         ))}

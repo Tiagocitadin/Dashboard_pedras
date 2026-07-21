@@ -45,6 +45,14 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+.kpi-card.verde {
+    border-color: #013913;
+}
+
+.kpi-card.vermelho {
+    border-color: #ef4444;
+}
+
 .kpi-card span {
   font-size: 0.75rem;
   color: #64748b;

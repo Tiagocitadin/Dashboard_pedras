@@ -30,6 +30,21 @@ const converterTempoParaHoras = (tempoStr) => {
     return 0;
 };
 
+// Formata horas decimais para HH:MM:SS (suportando mais de 24h)
+const formatarHorasParaHHMMSS = (totalHoras) => {
+    if (!totalHoras || isNaN(totalHoras)) {
+        return "00:00:00";
+    }
+
+    const segundosTotais = Math.round(totalHoras * 3600);
+
+    const horas = Math.floor(segundosTotais / 3600);
+    const minutos = Math.floor((segundosTotais % 3600) / 60);
+    const segundos = segundosTotais % 60;
+
+    return `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+};
+
 
 // Formata horas decimais para HH:MM (suportando mais de 24h)
 const formatarHorasParaHHMM = (totalHoras) => {
@@ -100,7 +115,7 @@ export const useDashboardMetrics = (dados) => {
             )
             .reduce(
                 (acc, cur) =>
-                    acc + converterTempoParaHoras(cur.tempo),
+                    acc + converterTempoParaHoras(cur.duracao),
                 0
             );
 
@@ -114,7 +129,7 @@ export const useDashboardMetrics = (dados) => {
             )
             .reduce(
                 (acc, cur) =>
-                    acc + converterTempoParaHoras(cur.tempo),
+                    acc + converterTempoParaHoras(cur.duracao),
                 0
             );
 
@@ -162,7 +177,7 @@ export const useDashboardMetrics = (dados) => {
                         name,
                         value,
                         formattedValue:
-                            formatarHorasParaHHMM(value)
+                            formatarHorasParaHHMMSS(value)
                     }))
                     .sort((a, b) => b.value - a.value)
         };
