@@ -19,21 +19,17 @@
   font-size: 14px; 
 }
 
-/* Tabela Responsiva com indicação visual de rolagem */
+/* Tabela Padrão (Desktop) */
 .table-responsive {
   background: white;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
-  overflow-x: auto; /* Essencial para permitir o arraste horizontal */
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.05); /* Sombra sutil indicando que tem conteúdo pro lado */
+  overflow: hidden;
 }
 
 .usuarios-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 550px; /* Reduzido levemente para caber melhor em telas intermediárias */
 }
 
 .usuarios-table th, 
@@ -41,7 +37,6 @@
   padding: 16px 20px;
   text-align: left;
   border-bottom: 1px solid #f1f5f9;
-  white-space: nowrap; /* Impede que o texto quebre e esmague os botões */
 }
 
 .usuarios-table th {
@@ -58,6 +53,7 @@
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
+  display: inline-block;
 }
 
 .badge-role.admin { 
@@ -150,27 +146,90 @@
   border-color: #cbd5e1;
 }
 
-/* --- RESPONSIVIDADE ADICIONAL --- */
+
+/* --- RESPONSIVIDADE SEM BARRA DE ROLAGEM (TRANSFORMA EM CARDS NO CELULAR) --- */
 @media (max-width: 768px) {
   .gerenciar-usuarios-container {
-    margin: 20px auto;
     padding: 0 12px;
+    margin: 20px auto;
   }
 
-  .usuarios-table th, 
+  /* Oculta o cabeçalho e as bordas tradicionais da tabela */
+  .table-responsive {
+    background: transparent;
+    border: none;
+    overflow: visible;
+  }
+
+  .usuarios-table thead {
+    display: none; /* Some com o cabeçalho "E-mail, Perfil, Ações" */
+  }
+
+  .usuarios-table, 
+  .usuarios-table tbody, 
+  .usuarios-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  /* Cada linha vira um card flutuante bonito */
+  .usuarios-table tr {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Cada coluna vira uma linha dentro do card */
   .usuarios-table td {
-    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: right !important;
+  }
+
+  .usuarios-table td:last-child {
+    border-bottom: none;
+    padding-top: 12px;
+    justify-content: flex-end; /* Joga o botão de ação para a direita ou tela toda */
+  }
+
+  /* Criação de rótulos automáticos para identificar os dados no celular */
+  .usuarios-table td:nth-child(1):before {
+    content: "E-mail:";
+    font-weight: 600;
+    color: #64748b;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .usuarios-table td:nth-child(2):before {
+    content: "Perfil:";
+    font-weight: 600;
+    color: #64748b;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .user-email-col {
+    word-break: break-all;
+    max-width: 60%;
+    text-align: left !important;
+  }
+
+  /* Botão ocupa espaço adequado no card */
+  .btn-change-role {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
     font-size: 13px;
   }
 
-  .admin-header-block h2 {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
   .btn-voltar-home {
     width: 100%;
-    justify-content: center;
   }
 }
