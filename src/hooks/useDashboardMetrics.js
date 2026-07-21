@@ -105,10 +105,7 @@ export const useDashboardMetrics = (dados) => {
             ? (totalConforme / totalProduzido) * 100
             : 0;
 
-        // ==========================
-        // HORAS PRODUZINDO
-        // campo usado: tempo
-        // ==========================
+            // HORAS PRODUZINDO      
         const horasTrabalhadasDec = safeDados
             .filter(cur =>
                 normalizarStatus(cur.status) === "produzindo"
@@ -119,10 +116,8 @@ export const useDashboardMetrics = (dados) => {
                 0
             );
 
-        // ==========================
-        // HORAS INDISPONÍVEL
-        // campo usado: tempo
-        // ==========================
+      
+        // HORAS INDISPONÍVEL       
         const horasParadasDec = safeDados
             .filter(cur =>
                 normalizarStatus(cur.status) === "indisponivel"

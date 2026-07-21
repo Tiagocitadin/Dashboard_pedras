@@ -5,7 +5,7 @@ import './Home.css';
 
 function Home({ user, isAdmin }) {
   const navigate = useNavigate();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loadingLogin, setLoadingLogin] = useState(false);
@@ -23,23 +23,24 @@ function Home({ user, isAdmin }) {
 
     if (error) {
       setLoginError(
-        error.message === 'Invalid login credentials' 
-          ? 'Credenciais inválidas. Verifique seu e-mail e senha.' 
+        error.message === 'Invalid login credentials'
+          ? 'Credenciais inválidas. Verifique seu e-mail e senha.'
           : error.message
       );
-      setPassword(''); // Limpa apenas a senha em caso de erro, mantendo o e-mail
+      setPassword('');
     } else {
-      setPassword(''); // Limpa a senha após o login com sucesso (o e-mail pode ser limpo se desejar, mas mantemos conforme solicitado)
+      setPassword('');
     }
     setLoadingLogin(false);
   }, [email, password]);
 
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut();
-    setPassword(''); // Limpa a senha ao deslogar
+    setPassword('');
   }, []);
 
   const goToDashboard = useCallback(() => navigate('/dashboard'), [navigate]);
+  const goToRelatorios = useCallback(() => navigate('/relatorios'), [navigate]); // <-- Adicionado aqui
   const goToImportar = useCallback(() => navigate('/importar'), [navigate]);
   const goToUsuarios = useCallback(() => navigate('/usuarios'), [navigate]);
   const goToCadastro = useCallback(() => navigate('/cadastro'), [navigate]);
@@ -62,7 +63,16 @@ function Home({ user, isAdmin }) {
                 <p>Gráficos de eficiência, peças fabricadas, tempos de atividade e análise de paradas.</p>
               </div>
             </div>
-            
+
+            {/* Card de Relatórios atualizado com a função */}
+           {/* <div className="guide-item" onClick={goToRelatorios}>
+              <span className="guide-icon">📊</span>
+              <div>
+                <h4>Gerar Relatórios</h4>
+                <p>Filtre dados por status e período para exportar relatórios detalhados em PDF ou Excel.</p>
+              </div>
+            </div> */}
+
             {user && isAdmin && (
               <>
                 <div className="guide-item" onClick={goToImportar}>
@@ -91,7 +101,7 @@ function Home({ user, isAdmin }) {
               <div className="avatar">👤</div>
               <h3>Sessão Ativa</h3>
               <p className="email-text">{user.email}</p>
-              
+
               <div className="role-box">
                 Nível de Acesso: <strong>{isAdmin ? 'Administrador (Completo)' : 'Operador (Apenas Leitura)'}</strong>
               </div>
@@ -110,7 +120,7 @@ function Home({ user, isAdmin }) {
                   Ir para Dashboard
                 </button>
               )}
-              
+
               <button className="btn-logout-secundario" onClick={handleLogout}>
                 Sair da Conta
               </button>
@@ -119,33 +129,33 @@ function Home({ user, isAdmin }) {
             <div className="login-form-wrapper">
               <h3>Acesso ao Sistema</h3>
               <p className="login-subtitle">Faça login para continuar</p>
-              
+
               {loginError && <div className="login-error-alert">{loginError}</div>}
-              
+
               <form onSubmit={handleLogin} className="login-form">
                 <div className="form-group">
                   <label>E-mail</label>
-                  <input 
-                    type="email" 
-                    placeholder="nome@empresa.com" 
+                  <input
+                    type="email"
+                    placeholder="nome@empresa.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label>Senha</label>
-                  <input 
-                    type="password" 
-                    placeholder="••••••••" 
+                  <input
+                    type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
                     required
                   />
                 </div>
-                
+
                 <button type="submit" className="btn-submit" disabled={loadingLogin}>
                   {loadingLogin ? 'Autenticando...' : 'Entrar'}
                 </button>
@@ -153,9 +163,9 @@ function Home({ user, isAdmin }) {
 
               <div className="login-footer-actions">
                 <span className="separator-text">ou</span>
-                <button 
-                  type="button" 
-                  className="btn-link-cadastro" 
+                <button
+                  type="button"
+                  className="btn-link-cadastro"
                   onClick={goToCadastro}
                 >
                   Criar nova conta
