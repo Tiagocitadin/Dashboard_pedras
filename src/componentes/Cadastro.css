@@ -5,7 +5,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #f8fafc;
-  padding: 16px; /* Ajustado para respiro em telas bem pequenas */
+  padding: 16px;
   box-sizing: border-box;
 }
 
@@ -17,7 +17,7 @@
   border-radius: 16px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box; /* Garante que o padding não estoure a largura máxima */
+  box-sizing: border-box;
 }
 
 /* Header do Card */
@@ -34,12 +34,13 @@
 .register-header h2 {
   margin: 0 0 8px 0;
   color: #0f172a;
-  font-size: 1.5rem; /* Usando rem para melhor escalabilidade */
+  font-size: 1.5rem;
 }
 
 .register-header p {
   color: #64748b;
   font-size: 14px;
+  margin: 0;
 }
 
 /* Alertas de Feedback */
@@ -49,7 +50,7 @@
   margin-bottom: 20px;
   font-size: 13px;
   text-align: center;
-  word-break: break-word; /* Evita que textos longos estutorem a caixa */
+  word-break: break-word;
 }
 
 .register-alert.error {
@@ -82,8 +83,10 @@
   padding: 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  font-size: 16px; /* Evita zoom no iPhone */
+  font-size: 16px;
   box-sizing: border-box;
+  background-color: #ffffff;
+  color: #0f172a;
 }
 
 .form-group input:focus {
@@ -107,8 +110,14 @@
   box-sizing: border-box;
 }
 
-.btn-register:hover:not(:disabled) { background-color: #1d4ed8; }
-.btn-register:disabled { background-color: #94a3b8; cursor: not-allowed; }
+.btn-register:hover:not(:disabled) { 
+  background-color: #1d4ed8; 
+}
+
+.btn-register:disabled { 
+  background-color: #94a3b8; 
+  cursor: not-allowed; 
+}
 
 .register-footer {
   margin-top: 24px;
@@ -127,11 +136,13 @@
   margin-top: 8px;
 }
 
-.btn-back-login:hover { color: #0f172a; }
+.btn-back-login:hover { 
+  color: #0f172a; 
+}
 
-/* Media Query opcional para celulares muito estreitos (ex: iPhone SE antigo) */
+/* Responsividade para celulares estreitos */
 @media (max-width: 480px) {
   .register-card {
-    padding: 20px; /* Reduz o padding interno para sobrar mais espaço útil */
+    padding: 20px;
   }
 }

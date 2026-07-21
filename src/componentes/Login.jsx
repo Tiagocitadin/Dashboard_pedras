@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../Servicos/clienteSupabase';
+import './Login.css'; // Certifique-se de criar este arquivo CSS para estilos específicos do login
 
 function Login() {
   const navigate = useNavigate();

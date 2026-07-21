@@ -78,7 +78,7 @@
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 8px; /* Espaço entre o ícone e o texto */
+  gap: 8px;
   font-size: 14px;
 }
 
@@ -120,7 +120,6 @@
 
 .select-tabela select:focus {
   border-color: #4a90e2;
-  /* Ajuste para sua cor padrão */
 }
 
 .select-tabela select:disabled {

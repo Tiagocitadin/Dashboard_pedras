@@ -1,133 +1,40 @@
-/* Configuração Global do Aplicativo */
+/* Resets e Configuração Base do Aplicativo */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body, html, #root {
   margin: 0;
   padding: 0;
-  background-color: #f8fafc; /* Fundo cinza claro ultra moderno */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Container Principal do Layout */
+/* Estrutura base de layout global opcional */
 .app-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-
-/* Marca (Logo e Nome) */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Rolagem suave personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.brand-logo {
-  font-size: 22px;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.brand-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.015em;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
-/* Links do Menu */
-.navbar-menu {
-  display: flex;
-  gap: 8px;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
-
-.nav-link {
-  background: none;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #64748b;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.nav-link:hover {
-  color: #1e293b;
-  background-color: #f1f5f9;
-}
-
-.nav-link.active {
-  color: #2563eb;
-  background-color: #eff6ff;
-  font-weight: 600;
-}
-
-/* Seção de Autenticação na Direita */
-.navbar-auth-section {
-  display: flex;
-  align-items: center;
-}
-
-.user-logged-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-email {
-  font-size: 13.5px;
-  color: #475569;
-  font-weight: 500;
-}
-
-/* Badges de Status de Usuário */
-.admin-badge {
-  background-color: #fef3c7;
-  color: #d97706;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 12px;
-  border: 1px solid #fde68a;
-  text-transform: uppercase;
-}
-
-.guest-badge {
-  background-color: #f1f5f9;
-  color: #475569;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-}
-
-/* Botões de Logout */
-.btn-logout {
-  background: none;
-  border: 1px solid #e2e8f0;
-  color: #64748b;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12.5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-logout:hover {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border-color: #fca5a5;
-}
-
-/* Área do Conteúdo */
-.main-content {
-  flex: 1;
-  max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 32px 40px;
-  box-sizing: border-box;
-}
-

@@ -6,66 +6,21 @@
   background-color: #f8fafc;
 }
 
-/* Sidebar de Filtros */
-.sidebar {
-  background: #ffffff;
-  padding: 24px;
-  border-right: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.brand-title {
-  font-size: 1.25rem;
-  color: #1e293b;
-  margin: 0;
-}
-
-.filter-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.filter-section label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #64748b;
-  margin-top: 8px;
-}
-
-.filter-section input,
-.filter-section select {
-  padding: 10px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.clear-date-btn {
-  background: none;
-  border: none;
-  color: #ef4444;
-  font-size: 0.7rem;
-  cursor: pointer;
-  font-weight: 700;
-}
-
 /* Main Content */
 .main-content {
   padding: 32px 40px;
+  overflow-x: hidden;
 }
 
 .dashboard-header h1 {
   margin: 0 0 24px 0;
   color: #0f172a;
+  font-size: 1.75rem;
 }
 
 /* KPI Grid */
 .kpi-grid {
   display: grid;
-  /* Isso divide o grid em 3 colunas de tamanhos iguais */
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 32px;
@@ -76,18 +31,26 @@
   padding: 20px;
   border-radius: 12px;
   border-left: 4px solid #e2e8f0;  
-  /* Layout Flex Unificado */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   display: flex;
-  flex-direction: column; /* Coloca ícone -> label -> valor um embaixo do outro */
-  align-items: center;    /* Centraliza horizontalmente */
-  justify-content: center; /* Centraliza verticalmente no card */
-  gap: 4px;               /* Espaçamento compacto e uniforme */
+  flex-direction: column;
+  align-items: center;    
+  justify-content: center; 
+  gap: 4px;               
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .kpi-card span {
   font-size: 0.75rem;
   color: #64748b;
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 .kpi-card strong {
@@ -106,6 +69,14 @@
   padding: 24px;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.chart-container h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #1e293b;
+  letter-spacing: 0.05em;
 }
 
 .motivos-list {
@@ -126,6 +97,7 @@
   justify-content: space-between;
   font-size: 0.85rem;
   font-weight: 500;
+  color: #334155;
 }
 
 .progress-bg {
@@ -142,46 +114,23 @@
   transition: width 0.5s ease;
 }
 
-/* Responsividade Mobile */
+/* Responsividade Mobile e Tablets */
 @media (max-width: 1024px) {
   .dashboard-container {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-  }
-
   .main-content {
     padding: 20px;
   }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* Botão Voltar */
-.back-home-btn {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  padding: 10px 16px;
-  border-radius: 6px;
-  color: #475569;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  width: 100%;
-  justify-content: center;
-}
-
-.back-home-btn:hover {
-  background: #e2e8f0;
-  color: #0f172a;
-  border-color: #cbd5e1;
-}
-
-.back-home-btn:active {
-  transform: scale(0.98);
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -5,16 +5,26 @@
   padding: 0 20px;
 }
 
-.admin-header-block { margin-bottom: 32px; }
-.admin-header-block h2 { color: #0f172a; margin: 0 0 8px 0; }
-.admin-header-block p { color: #64748b; font-size: 14px; }
+.admin-header-block { 
+  margin-bottom: 32px; 
+}
+
+.admin-header-block h2 { 
+  color: #0f172a; 
+  margin: 0 0 8px 0; 
+}
+
+.admin-header-block p { 
+  color: #64748b; 
+  font-size: 14px; 
+}
 
 /* Tabela Responsiva */
 .table-responsive {
   background: white;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
-  overflow: hidden; /* Garante o arredondamento da borda */
+  overflow: hidden;
 }
 
 .usuarios-table {
@@ -45,8 +55,15 @@
   font-weight: 600;
 }
 
-.badge-role.admin { background: #fef3c7; color: #92400e; }
-.badge-role.operador { background: #f1f5f9; color: #475569; }
+.badge-role.admin { 
+  background: #fef3c7; 
+  color: #92400e; 
+}
+
+.badge-role.operador { 
+  background: #f1f5f9; 
+  color: #475569; 
+}
 
 /* Botões de Ação */
 .btn-change-role {
@@ -63,14 +80,21 @@
   background: #2563eb;
   color: white;
 }
-.btn-change-role.adm:hover { background: #1d4ed8; }
+
+.btn-change-role.adm:hover { 
+  background: #1d4ed8; 
+}
 
 .btn-change-role.op {
   background: white;
   border-color: #cbd5e1;
   color: #475569;
 }
-.btn-change-role.op:hover { background: #f8fafc; border-color: #94a3b8; }
+
+.btn-change-role.op:hover { 
+  background: #f8fafc; 
+  border-color: #94a3b8; 
+}
 
 /* Mensagens e Loading */
 .alert-message {
@@ -81,34 +105,52 @@
   justify-content: space-between;
 }
 
-.alert-message.sucesso { background: #dcfce7; color: #166534; }
-.alert-message.erro { background: #fee2e2; color: #991b1b; }
+.alert-message.sucesso { 
+  background: #dcfce7; 
+  color: #166534; 
+}
 
-.close-alert { background: none; border: none; cursor: pointer; font-size: 18px; }
+.alert-message.erro { 
+  background: #fee2e2; 
+  color: #991b1b; 
+}
 
-@media (max-width: 600px) {
-  .usuarios-table th, .usuarios-table td { padding: 12px; font-size: 13px; }
-  .btn-change-role { padding: 6px 10px; }
+.close-alert { 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 18px; 
 }
 
 .btn-voltar-home {
-    background-color: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    color: #1e293b;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .btn-voltar-home:hover {
-    background-color: #e2e8f0;
-    border-color: #cbd5e1;
+  background-color: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+@media (max-width: 600px) {
+  .usuarios-table th, 
+  .usuarios-table td { 
+    padding: 12px; 
+    font-size: 13px; 
+  }
+  .btn-change-role { 
+    padding: 6px 10px; 
+  }
 }
