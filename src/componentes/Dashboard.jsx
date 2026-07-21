@@ -176,7 +176,7 @@ export default function Dashboard() {
                                     <div
                                         className="progress-fill"
                                         style={{
-                                            width: `${metrics?.motivos?.length > 0 ? (item.value / (metrics.motivos[0].value * 1.15)) * 100 : 0}%`
+                                            width: `${metrics?.motivos?.length > 0 ? (item.value / (metrics.motivos[0].value * 1.01)) * 100 : 0}%`
                                         }}
                                     />
                                 </div>
