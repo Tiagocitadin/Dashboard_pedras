@@ -10,6 +10,17 @@ function GerenciarUsuarios() {
   const [loading, setLoading] = useState(true);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
 
+  // Efeito para apagar a mensagem automaticamente após 3 segundos
+  useEffect(() => {
+    if (!mensagem.texto) return;
+
+    const timer = setTimeout(() => {
+      setMensagem({ tipo: '', texto: '' });
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [mensagem]);
+
   // Busca inicial otimizada
   const carregarUsuarios = useCallback(async () => {
     try {
@@ -110,8 +121,7 @@ function GerenciarUsuarios() {
 
       {mensagem.texto && (
         <div className={`alert-message ${mensagem.tipo}`}>
-          {mensagem.texto}
-          <button onClick={() => setMensagem({ tipo: '', texto: '' })} className="close-alert">×</button>
+          <span>{mensagem.texto}</span>
         </div>
       )}
 
