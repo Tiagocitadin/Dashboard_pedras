@@ -154,3 +154,40 @@
     padding: 6px 10px; 
   }
 }
+
+/* --- RESPONSIVIDADE ADICIONAL --- */
+
+/* Permite rolagem horizontal limpa em telas pequenas na tabela */
+@media (max-width: 768px) {
+  .gerenciar-usuarios-container {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .usuarios-table {
+    min-width: 600px; /* Garante espaço suficiente para as colunas não esmagarem */
+  }
+
+  .usuarios-table th, 
+  .usuarios-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .admin-header-block h2 {
+    font-size: 20px;
+  }
+}
+
+/* Ajustes finos para celulares muito estreitos */
+@media (max-width: 480px) {
+  .btn-voltar-home {
+    width: 100%; /* Botão voltar ocupa a largura toda no mobile */
+    justify-content: center;
+  }
+}
